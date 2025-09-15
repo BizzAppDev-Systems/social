@@ -6,7 +6,7 @@
 {
     "name": "Discuss Group",
     "summary": "Add a group to display 'Discuss' Application menu entry",
-    "version": "16.0.1.0.0",
+    "version": "17.0.1.0.0",
     "category": "Usability",
     "license": "AGPL-3",
     "author": "GRAP, Odoo Community Association (OCA)",
@@ -19,7 +19,8 @@
     ],
     "assets": {
         "web.assets_backend": [
-            "mail_discuss_security/static/src/js/*.js",
+            "mail_discuss_security/static/src/js/systray_service.esm.js",
+            "mail_discuss_security/static/core/web/messaging_menu_patch.xml",
         ],
     },
     "installable": True,
