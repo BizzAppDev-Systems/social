@@ -1,24 +1,22 @@
 /** @odoo-module **/
 
-import {MessagingMenuContainer} from "@mail/components/messaging_menu_container/messaging_menu_container";
-import {registry} from "@web/core/registry";
-import session from "web.session";
+import {MessagingMenu} from "@mail/core/public_web/messaging_menu";
+import {useState} from "@odoo/owl";
+import {patch} from "@web/core/utils/patch";
+import {user} from "@web/core/user";
 
-const systrayRegistry = registry.category("systray");
-
-export const systrayService = {
-    start() {
-        session
-            .user_has_group("mail_discuss_security.group_discuss")
-            .then(function (has_group) {
-                if (!has_group) {
-                    systrayRegistry.remove("mail.MessagingMenuContainer", {
-                        Component: MessagingMenuContainer,
-                    });
-                }
-            });
+patch(MessagingMenu.prototype, {
+    setup() {
+        this.state = useState({
+            hasDiscussGroup: false,
+        });
+        super.setup();
+        user.hasGroup("mail_discuss_security.group_discuss").then((hasGroup) => {
+            this.state.hasDiscussGroup = hasGroup;
+        });
     },
-};
 
-const serviceRegistry = registry.category("services");
-serviceRegistry.add("mail_discuss_security_systray_service", systrayService);
+    get shouldRender() {
+        return this.state.hasDiscussGroup;
+    },
+});
